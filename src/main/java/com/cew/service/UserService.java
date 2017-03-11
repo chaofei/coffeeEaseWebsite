@@ -11,4 +11,6 @@ public interface UserService {
     TUser findById(Long id);
 
     TUser addUser(TUser user);
+
+    void initAdminUser();
 }

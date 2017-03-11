@@ -10,7 +10,9 @@ import java.io.Serializable;
  * Created by chenchaofei on 2017/3/10.
  */
 @Entity
-@Table(name = "t_user")
+@Table(name = "t_user", uniqueConstraints={
+        @UniqueConstraint(name = "idx_username", columnNames = {"userName"})
+})
 public class TUser implements Serializable {
     private static final long serialVersionUID = 1L;
 

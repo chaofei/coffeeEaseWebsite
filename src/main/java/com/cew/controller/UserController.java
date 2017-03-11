@@ -3,52 +3,59 @@ package com.cew.controller;
 /**
  * Created by chenchaofei on 2017/3/10.
  */
+import com.cew.common.config.CaptchaConfig;
 import com.cew.entity.TUser;
+import com.cew.result.JsonResult;
+import com.cew.result.ResultCode;
 import com.cew.service.UserService;
+import com.cew.util.Str;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
+@Api(value = "/user", description = "用户相关API", position = 1)
+@RequestMapping("/user")
 @RestController
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
-    public String helloWorld() {
-        return "hello World";
-    }
+    @Autowired
+    private HttpServletRequest request;
 
-    @ApiOperation(value="获取用户详细信息", notes="根据url的id来获取用户详细信息")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long")
-    @RequestMapping(value="/id/{id}", method= RequestMethod.GET)
-    public TUser getUser(@PathVariable Long id) {
-        return userService.findById(id);
-    }
+    @ApiOperation(value="登录", notes="用户登录", httpMethod = "POST")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType="query", dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType="query", dataType = "String"),
+            @ApiImplicitParam(name = "cap", value = "验证码", required = true, paramType="query", dataType = "String")
+    })
+    @RequestMapping(value="/login", method= RequestMethod.POST)
+    public JsonResult login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        @RequestParam("cap") String usercap) {
+        TUser user = userService.findByName(username);
+        String realcap = (String)request.getSession().getAttribute(CaptchaConfig.SESSION_KEY);
+        if(!usercap.equals(realcap)) {
+            return new JsonResult(ResultCode.INVALID_CAPCODE);
+        }
+        if(user == null) {
+            return new JsonResult(ResultCode.LOGIN_FAIL);
+        }
+        if(!user.getPassWord().equals(Str.md5(password))) {
+            return new JsonResult(ResultCode.LOGIN_FAIL);
+        }
 
-    /**
-     * 测试地址  http://localhost:8080/getUser?name=zhao
-     * @param name
-     * @return
-     */
-    @RequestMapping(value="/getUser", method= RequestMethod.GET)
-    public TUser user(String name) {
-        TUser user = userService.findByName(name);
-        return user;
-    }
-
-    /**
-     * 测试地址 http://localhost:8080/addUser?userName=zhao
-     * @param user
-     * @return
-     */
-    @RequestMapping(value="/addUser", method= RequestMethod.POST)
-    public TUser adduser(TUser user) {
-        return userService.addUser(user);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("id", user.getId());
+        data.put("username", user.getUserName());
+        return new JsonResult(ResultCode.LOGIN_SUCCESS, data);
     }
 }
