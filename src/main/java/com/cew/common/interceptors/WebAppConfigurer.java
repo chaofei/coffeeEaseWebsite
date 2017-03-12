@@ -4,6 +4,7 @@ package com.cew.common.interceptors;
  * Created by chenchaofei on 2017/3/10.
  * 拦截器配置
  */
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -11,6 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 public class WebAppConfigurer extends WebMvcConfigurerAdapter {
+
+    @Autowired
+    private AuthInterceptor authInterceptor;
 
     /**
      * 配置拦截器
@@ -22,7 +26,7 @@ public class WebAppConfigurer extends WebMvcConfigurerAdapter {
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截
 
-        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/job/admin/**");
 
 
         super.addInterceptors(registry);
