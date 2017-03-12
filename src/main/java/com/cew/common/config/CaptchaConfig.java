@@ -13,8 +13,6 @@ import java.util.Properties;
 @Configuration
 public class CaptchaConfig {
 
-    public static String SESSION_KEY = "capText";
-
     @Bean
     public DefaultKaptcha getKaptchaBean(){
         DefaultKaptcha defaultKaptcha=new DefaultKaptcha();

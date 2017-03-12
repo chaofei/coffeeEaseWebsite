@@ -3,7 +3,7 @@ package com.cew.controller;
 /**
  * Created by chenchaofei on 2017/3/10.
  */
-import com.cew.common.config.CaptchaConfig;
+import com.cew.common.config.HttpSessionConfig;
 import com.cew.entity.TUser;
 import com.cew.result.JsonResult;
 import com.cew.result.ResultCode;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,20 +43,18 @@ public class UserController {
                         @RequestParam("password") String password,
                         @RequestParam("cap") String usercap) {
         TUser user = userService.findByName(username);
-        String realcap = (String)request.getSession().getAttribute(CaptchaConfig.SESSION_KEY);
-        if(!usercap.equals(realcap)) {
-            return new JsonResult(ResultCode.INVALID_CAPCODE);
-        }
-        if(user == null) {
-            return new JsonResult(ResultCode.LOGIN_FAIL);
-        }
-        if(!user.getPassWord().equals(Str.md5(password))) {
-            return new JsonResult(ResultCode.LOGIN_FAIL);
-        }
+        HttpSession session = request.getSession();
+        String realcap = (String)session.getAttribute(HttpSessionConfig.KEY_CAP);
+
+        if(!usercap.equals(realcap)) return new JsonResult(ResultCode.INVALID_CAPCODE);
+
+        if(user == null) return new JsonResult(ResultCode.LOGIN_FAIL);
+        if(!user.getPassWord().equals(Str.md5(password))) return new JsonResult(ResultCode.LOGIN_FAIL);
 
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("id", user.getId());
         data.put("username", user.getUserName());
+        session.setAttribute(HttpSessionConfig.KEY_IS_LOGIN, data);
         return new JsonResult(ResultCode.LOGIN_SUCCESS, data);
     }
 }

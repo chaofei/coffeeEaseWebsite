@@ -9,4 +9,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @Configuration
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds=1800)//30分钟失效
 public class HttpSessionConfig {
+    public final static String KEY_CAP = "capText";
+
+    public final static String KEY_IS_LOGIN = "isLogin";
 }

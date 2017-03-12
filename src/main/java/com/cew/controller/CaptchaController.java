@@ -1,7 +1,9 @@
 package com.cew.controller;
 
 import com.cew.common.config.CaptchaConfig;
+import com.cew.common.config.HttpSessionConfig;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +20,15 @@ import java.awt.image.BufferedImage;
 /**
  * Created by chenchaofei on 2017/3/11.
  */
+@Api(value = "/captcha", description = "验证码")
+@RequestMapping("/captcha")
 @Controller
 public class CaptchaController {
 
     @Autowired
     private DefaultKaptcha captchaProducer;
 
-    @RequestMapping(value = "/captcha-image", method = RequestMethod.GET)
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
     void getKaptchaImage(HttpServletResponse response, HttpSession session) throws Exception {
         response.setDateHeader("Expires", 0);
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
@@ -33,7 +37,7 @@ public class CaptchaController {
         response.setContentType("image/jpeg");
 
         String capText = captchaProducer.createText();
-        session.setAttribute(CaptchaConfig.SESSION_KEY, capText);
+        session.setAttribute(HttpSessionConfig.KEY_CAP, capText);
 
         BufferedImage bi = captchaProducer.createImage(capText);
         ServletOutputStream out = response.getOutputStream();

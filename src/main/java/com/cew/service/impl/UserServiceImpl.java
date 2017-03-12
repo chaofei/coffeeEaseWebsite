@@ -3,8 +3,10 @@ package com.cew.service.impl;
 /**
  * Created by chenchaofei on 2017/3/10.
  */
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.cew.common.config.HttpSessionConfig;
 import com.cew.dao.TUserDao;
 import com.cew.entity.TUser;
 import com.cew.service.UserService;
@@ -12,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.HashMap;
 
 
 @Service
@@ -36,6 +42,12 @@ public class UserServiceImpl implements UserService {
     public TUser addUser(TUser user) {
         userDao.save(user);
         return user;
+    }
+
+    @Override
+    public HashMap getLoginInfo() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return (HashMap<String, Object>)request.getSession().getAttribute(HttpSessionConfig.KEY_IS_LOGIN);
     }
 
     private static boolean isStart=false;
