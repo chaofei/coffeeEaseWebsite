@@ -34,8 +34,7 @@ public class FileUploadController {
             System.out.println("上传的文件后缀名为：" + suffixName);
 
             // 文件上传路径
-            String destPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() +
-                    env.getProperty("upload.dir") + name + suffixName;
+            String destPath = env.getProperty("upload.dir") + name + suffixName;
             File dest = new File(destPath);
 
             System.out.println();
