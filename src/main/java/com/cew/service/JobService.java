@@ -10,13 +10,21 @@ import java.util.List;
 public interface JobService {
     TJob findById(Long id);
 
-    TJob addJob(TJob job);
+    boolean existsById(Long id);
 
-    TJob updateJob(TJob job);
+    TJob add(TJob job);
 
-    void deleteJob(Long id);
+    void modify(TJob job);
+
+    void delete(Long id);
+
+    void changeStatus(Long id, byte status);
 
     List<TJob> getOnineList(int pageNum);
 
+    Integer getOnlineCount();
+
     List<TJob> getOfflineList(int pageNum);
+
+    Integer getOfflineCount();
 }

@@ -1,7 +1,6 @@
 package com.cew.entity;
 
 import com.cew.util.Str;
-import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
 import java.io.Serializable;

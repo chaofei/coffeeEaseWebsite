@@ -34,18 +34,30 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public TJob addJob(TJob job) {
+    public boolean existsById(Long id) {
+        return jobDao.exists(id);
+    }
+
+    @Override
+    public TJob add(TJob job) {
         return jobDao.save(job);
     }
 
     @Override
-    public TJob updateJob(TJob job) {
-        return jobDao.save(job);
+    public void modify(TJob job) {
+        jobDao.modify(job.getId(), job.getTitle());
     }
 
     @Override
-    public void deleteJob(Long id) {
+    public void delete(Long id) {
         jobDao.delete(id);
+    }
+
+    @Override
+    public void changeStatus(Long id, byte status) {
+        if(status == TJob.STATUS_ONLINE || status == TJob.STATUS_OFFLINE) {
+            jobDao.updateStatus(id, status);
+        }
     }
 
     @Override
@@ -60,13 +72,22 @@ public class JobServiceImpl implements JobService {
 
     private List<TJob> getList(byte status, int pageNum) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        Pageable pageable = new PageRequest(pageNum, 20, sort);
-        logger.debug("status:{} pagenum:{} pageoffset:{} pagesize:{} pagenum:{}",
+        Pageable pageable = new PageRequest(pageNum, 10, sort);
+        logger.debug("status:{} pagenum:{} pageoffset:{} pagesize:{}",
                 status,
                 pageable.getPageNumber(),
                 pageable.getOffset(),
-                pageable.getPageSize(),
-                pageable.getPageNumber());
+                pageable.getPageSize());
         return jobDao.queryListByStatus(status, pageable);
+    }
+
+    @Override
+    public Integer getOnlineCount() {
+        return jobDao.queryCountByStatus(TJob.STATUS_ONLINE);
+    }
+
+    @Override
+    public Integer getOfflineCount() {
+        return jobDao.queryCountByStatus(TJob.STATUS_OFFLINE);
     }
 }

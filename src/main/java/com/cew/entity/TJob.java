@@ -1,7 +1,5 @@
 package com.cew.entity;
 
-import org.springframework.context.annotation.Configuration;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
