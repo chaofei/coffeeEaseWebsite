@@ -19,11 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Api(value = "/job", description = "职位API")
 @RequestMapping("/job")
 @RestController
@@ -32,9 +27,6 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @Autowired
-    private HttpServletRequest request;
-
     @ApiOperation(value="列表", notes="职位列表", httpMethod = "GET")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(name = "p", value = "页码", required = false, paramType="query", dataType = "int"),
@@ -42,18 +34,26 @@ public class JobController {
     @RequestMapping(value="/list", method= RequestMethod.GET)
     public JsonResult list(@RequestParam(value = "p", defaultValue = "0", required = false) int pageNum) {
         return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
-                jobService.getOnineList(pageNum),
+                jobService.getOnlineList(pageNum),
                 jobService.getOnlineCount()
         ));
     }
 
 
-    @ApiOperation(value="下线列表", notes="下线的职位列表", httpMethod = "GET")
+    @ApiOperation(value="管理列表", notes="职位管理列表", httpMethod = "GET")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "p", value = "页码", required = false, paramType="query", dataType = "int"),
+            @ApiImplicitParam(name = "s", value = "状态", required = false, paramType="query", dataType = "int"),
     })
-    @RequestMapping(value="/offlinelist", method= RequestMethod.GET)
-    public JsonResult offlineList(@RequestParam(value = "p", defaultValue = "0", required = false) int pageNum) {
+    @RequestMapping(value="/admin/list", method= RequestMethod.GET)
+    public JsonResult offlineList(@RequestParam(value = "p", defaultValue = "0", required = false) int pageNum,
+                                  @RequestParam(value = "s", defaultValue = "0", required = false) int status) {
+        if(status == 1) {
+            return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
+                    jobService.getOnlineList(pageNum),
+                    jobService.getOnlineCount()
+            ));
+        }
         return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
                 jobService.getOfflineList(pageNum),
                 jobService.getOfflineCount()
@@ -64,7 +64,7 @@ public class JobController {
     @ApiImplicitParams(value = {
         @ApiImplicitParam(name = "title", value = "职位名称", required = true, paramType="query", dataType = "String"),
     })
-    @RequestMapping(value="/add", method= RequestMethod.POST)
+    @RequestMapping(value="/admin/add", method= RequestMethod.POST)
     public JsonResult add(@RequestParam("title") String title){
         TJob job = new TJob();
         job.setTitle(title);
@@ -79,7 +79,7 @@ public class JobController {
             @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
             @ApiImplicitParam(name = "title", value = "职位名称", required = true, paramType="query", dataType = "String"),
     })
-    @RequestMapping(value="/modify", method= RequestMethod.POST)
+    @RequestMapping(value="/admin/modify", method= RequestMethod.POST)
     public JsonResult modify(@RequestParam("id") Long id,
             @RequestParam("title") String title){
         TJob job = new TJob();
@@ -94,7 +94,7 @@ public class JobController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int")
     })
-    @RequestMapping(value="/delete", method= RequestMethod.GET)
+    @RequestMapping(value="/admin/delete", method= RequestMethod.GET)
     public JsonResult delete(@RequestParam("id") Long id){
         jobService.delete(id);
         return new JsonResult(ResultCode.SUCCESS, true);
@@ -106,7 +106,7 @@ public class JobController {
             @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
             @ApiImplicitParam(name = "status", value = "职位状态", required = true, paramType="query", dataType = "int")
     })
-    @RequestMapping(value="/upstatus", method= RequestMethod.GET)
+    @RequestMapping(value="/admin/upstatus", method= RequestMethod.GET)
     public JsonResult upstatus(@RequestParam("id") Long id,
                                @RequestParam("status") byte status){
         jobService.changeStatus(id, status);

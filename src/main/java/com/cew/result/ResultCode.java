@@ -8,6 +8,9 @@ public enum ResultCode {
     SUCCESS(200, "成功"),
 
     /** 验证码错误 */
+    FORBIDDEN(403, "拒绝访问"),
+
+    /** 验证码错误 */
     INVALID_CAPCODE(444, "无效的验证码"),
 
     /**

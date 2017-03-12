@@ -61,7 +61,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<TJob> getOnineList(int pageNum) {
+    public List<TJob> getOnlineList(int pageNum) {
         return this.getList(TJob.STATUS_ONLINE, pageNum);
     }
 
