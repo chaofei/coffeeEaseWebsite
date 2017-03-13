@@ -16,6 +16,15 @@ public class TJob implements Serializable {
     public final static byte STATUS_ONLINE = 0;
     public final static byte STATUS_OFFLINE = 1;
 
+    public TJob(Long id, String title) {
+        this.setId(id);
+        this.title = title;
+    }
+
+
+    public TJob() {
+    }
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;

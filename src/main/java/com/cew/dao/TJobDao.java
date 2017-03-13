@@ -18,10 +18,10 @@ import java.util.List;
 @Repository
 public interface TJobDao extends PagingAndSortingRepository<TJob, Long>, JpaSpecificationExecutor<TJob> {
 
-    @Query("from TJob t where status = :status")
+    @Query("select new TJob(id, title) from TJob t where status = :status")
     List<TJob> queryListByStatus(@Param("status") byte status, Pageable pageable);
 
-    @Query("select count(*) from TJob t where status = :status")
+    @Query(value = "select count(t) from TJob t where status = :status")
     Integer queryCountByStatus(@Param("status") byte status);
 
     @Modifying
