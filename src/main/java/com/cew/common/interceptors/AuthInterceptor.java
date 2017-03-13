@@ -1,18 +1,14 @@
 package com.cew.common.interceptors;
 
 import com.alibaba.fastjson.JSON;
-import com.cew.common.config.HttpSessionConfig;
 import com.cew.result.JsonResult;
 import com.cew.result.ResultCode;
 import com.cew.service.UserService;
-import com.cew.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
