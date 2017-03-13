@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public HashMap getLoginInfo() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        return (HashMap<String,Object>)request.getSession().getAttribute(HttpSessionConfig.KEY_IS_LOGIN);
+        return (HashMap)request.getSession().getAttribute(HttpSessionConfig.KEY_IS_LOGIN);
     }
 
     private static boolean isStart=false;
