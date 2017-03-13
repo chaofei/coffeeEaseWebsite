@@ -16,7 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -61,16 +64,16 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<TJob> getOnlineList(int pageNum) {
+    public List getOnlineList(int pageNum) {
         return this.getList(TJob.STATUS_ONLINE, pageNum);
     }
 
     @Override
-    public List<TJob> getOfflineList(int pageNum) {
+    public List getOfflineList(int pageNum) {
         return this.getList(TJob.STATUS_OFFLINE, pageNum);
     }
 
-    private List<TJob> getList(byte status, int pageNum) {
+    private List getList(byte status, int pageNum) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(pageNum, 10, sort);
         logger.debug("status:{} pagenum:{} pageoffset:{} pagesize:{}",
@@ -78,7 +81,17 @@ public class JobServiceImpl implements JobService {
                 pageable.getPageNumber(),
                 pageable.getOffset(),
                 pageable.getPageSize());
-        return jobDao.queryListByStatus(status, pageable);
+        List<TJob> list = jobDao.queryListByStatus(status, pageable);
+
+        List ret = new ArrayList();
+        for(int i=0; i<list.size(); i++) {
+            TJob dbJob = list.get(i);
+            Map job = new HashMap();
+            job.put("id", dbJob.getId());
+            job.put("title", dbJob.getTitle());
+            ret.add(job);
+        }
+        return ret;
     }
 
     @Override

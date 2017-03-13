@@ -20,11 +20,11 @@ public interface JobService {
 
     void changeStatus(Long id, byte status);
 
-    List<TJob> getOnlineList(int pageNum);
+    List getOnlineList(int pageNum);
 
     Integer getOnlineCount();
 
-    List<TJob> getOfflineList(int pageNum);
+    List getOfflineList(int pageNum);
 
     Integer getOfflineCount();
 }

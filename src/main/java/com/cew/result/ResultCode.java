@@ -10,6 +10,9 @@ public enum ResultCode {
     /** 验证码错误 */
     FORBIDDEN(403, "拒绝访问"),
 
+    /** 页面不存在 */
+    PAGE_NOT_FOUND(404, "页面不存在"),
+
     /** 验证码错误 */
     INVALID_CAPCODE(444, "无效的验证码"),
 
