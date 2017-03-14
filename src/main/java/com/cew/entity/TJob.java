@@ -2,8 +2,7 @@ package com.cew.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 
 /**
  * Created by chenchaofei on 2017/3/12.
@@ -29,15 +28,40 @@ public class TJob implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)//级联保存、更新、删除、刷新;延迟加载
-    @JoinColumn(name="job_id")
-    private Set<TResume> resumes = new HashSet<TResume>();
-
     @Column(name = "title")
     private String title;
 
     @Column(name = "status")
     private byte status;
+
+    @Column(name = "update_at")
+    private Date updateAt;
+
+    @Column(name = "create_at")
+    private Date createAt;
+
+    @PrePersist
+    public void prePersist(){
+        this.updateAt = new Date();
+        this.createAt = this.updateAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
 
     public byte getStatus() {
         return status;
@@ -63,11 +87,4 @@ public class TJob implements Serializable {
         this.title = title;
     }
 
-    public Set<TResume> getResumes() {
-        return resumes;
-    }
-
-    public void setResumes(Set<TResume> resumes) {
-        this.resumes = resumes;
-    }
 }

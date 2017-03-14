@@ -13,8 +13,4 @@ import org.springframework.stereotype.Repository;
 public interface TUserDao extends PagingAndSortingRepository<TUser, Long>, JpaSpecificationExecutor<TUser> {
 
     TUser findByUserName(String userName);
-
-//    @Query("from TUser t where id = :id")
-//    List<TUser> queryFamilyList(@Param("id") Long id, Pageable pageable);
-
 }

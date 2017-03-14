@@ -16,10 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -48,7 +45,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void modify(TJob job) {
-        jobDao.modify(job.getId(), job.getTitle());
+        jobDao.modify(job.getId(), job.getTitle(), new Date());
     }
 
     @Override

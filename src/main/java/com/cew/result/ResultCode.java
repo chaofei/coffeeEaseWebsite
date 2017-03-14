@@ -26,6 +26,11 @@ public enum ResultCode {
      */
     LOGIN_SUCCESS(600, "登录成功"),
 
+    /**
+     * 参数非法
+     */
+    PARAMS_ILLEGAL(700, "参数非法"),
+
     ;
 
     private ResultCode(int value, String msg){

@@ -45,21 +45,23 @@ public class JobController {
     @ApiOperation(value="管理列表", notes="职位管理列表", httpMethod = "GET")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "p", value = "页码", required = false, paramType="query", dataType = "int"),
-            @ApiImplicitParam(name = "s", value = "状态", required = false, paramType="query", dataType = "int"),
+            @ApiImplicitParam(name = "s", value = "状态 0(默认):在线；1:下线", required = false, paramType="query", dataType = "int"),
     })
     @RequestMapping(value="/admin/list", method= RequestMethod.GET)
     public JsonResult offlineList(@RequestParam(value = "p", defaultValue = "0", required = false) int pageNum,
                                   @RequestParam(value = "s", defaultValue = "0", required = false) int status) {
-        if(status == 1) {
+        if(status == TJob.STATUS_OFFLINE) {
+            return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
+                jobService.getOfflineList(pageNum),
+                jobService.getOfflineCount()
+            ));
+        } else if(status == TJob.STATUS_ONLINE){
             return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
                     jobService.getOnlineList(pageNum),
                     jobService.getOnlineCount()
             ));
         }
-        return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
-                jobService.getOfflineList(pageNum),
-                jobService.getOfflineCount()
-        ));
+        return new JsonResult(ResultCode.PARAMS_ILLEGAL);
     }
 
     @ApiOperation(value="添加", notes="添加职位", httpMethod = "POST")
@@ -76,10 +78,20 @@ public class JobController {
     }
 
 
+    @ApiOperation(value="查看详情", notes="查看职位详情", httpMethod = "POST")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
+    })
+    @RequestMapping(value="/admin/detail", method= RequestMethod.POST)
+    public JsonResult detail(@RequestParam("id") Long id){
+        return new JsonResult(ResultCode.SUCCESS, jobService.findById(id));
+    }
+
+
     @ApiOperation(value="更新资料", notes="更新职位资料", httpMethod = "POST")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
-            @ApiImplicitParam(name = "title", value = "职位名称", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
+        @ApiImplicitParam(name = "title", value = "职位名称", required = true, paramType="query", dataType = "String"),
     })
     @RequestMapping(value="/admin/modify", method= RequestMethod.POST)
     public JsonResult modify(@RequestParam("id") Long id,
@@ -94,7 +106,7 @@ public class JobController {
 
     @ApiOperation(value="删除", notes="删除职位", httpMethod = "GET")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int")
+        @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int")
     })
     @RequestMapping(value="/admin/delete", method= RequestMethod.GET)
     public JsonResult delete(@RequestParam("id") Long id){
@@ -105,8 +117,8 @@ public class JobController {
 
     @ApiOperation(value="更新状态", notes="更新职位状态", httpMethod = "GET")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
-            @ApiImplicitParam(name = "status", value = "职位状态", required = true, paramType="query", dataType = "int")
+        @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
+        @ApiImplicitParam(name = "status", value = "职位状态", required = true, paramType="query", dataType = "int")
     })
     @RequestMapping(value="/admin/upstatus", method= RequestMethod.GET)
     public JsonResult upstatus(@RequestParam("id") Long id,
@@ -114,9 +126,5 @@ public class JobController {
         jobService.changeStatus(id, status);
         return new JsonResult(ResultCode.SUCCESS, true);
     }
-
-
-
-
 
 }
