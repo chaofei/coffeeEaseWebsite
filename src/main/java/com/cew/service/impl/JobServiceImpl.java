@@ -45,7 +45,15 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void modify(TJob job) {
-        jobDao.modify(job.getId(), job.getTitle(), new Date());
+        jobDao.modify(job.getId(),
+                job.getTitle(),
+                job.getSalary(),
+                job.getAddr(),
+                job.getExperience(),
+                job.getWelfare(),
+                job.getDescription(),
+                job.getRequirements(),
+                new Date());
     }
 
     @Override
@@ -86,6 +94,10 @@ public class JobServiceImpl implements JobService {
             Map job = new HashMap();
             job.put("id", dbJob.getId());
             job.put("title", dbJob.getTitle());
+            job.put("salary",dbJob.getSalary());
+            job.put("addr",dbJob.getAddr());
+            job.put("experience",dbJob.getExperience());
+            job.put("create_at", dbJob.getCreateAt());
             ret.add(job);
         }
         return ret;

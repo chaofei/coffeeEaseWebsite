@@ -19,15 +19,31 @@ import java.util.List;
 @Repository
 public interface TJobDao extends PagingAndSortingRepository<TJob, Long>, JpaSpecificationExecutor<TJob> {
 
-    @Query("select new TJob(id, title) from TJob t where status = :status order by updateAt desc")
+    @Query("select t from TJob t where status = :status order by updateAt desc")
     List<TJob> queryListByStatus(@Param("status") byte status, Pageable pageable);
 
     @Query(value = "select count(t) from TJob t where status = :status")
     Integer queryCountByStatus(@Param("status") byte status);
 
     @Modifying
-    @Query("update TJob set title=:title, updateAt=:dt where id=:id")
-    void modify(@Param("id") Long id, @Param("title") String title, @Param("dt")Date dt);
+    @Query("update TJob set title=:title," +
+            "salary=:salary," +
+            "addr=:addr," +
+            "experience=:experience," +
+            "welfare=:welfare," +
+            "description=:description," +
+            "requirements=:requirements," +
+            "updateAt=:dt " +
+            "where id=:id")
+    void modify(@Param("id") Long id,
+                @Param("title") String title,
+                @Param("salary") String salary,
+                @Param("addr") String addr,
+                @Param("experience") String experience,
+                @Param("welfare") String welfare,
+                @Param("description") String description,
+                @Param("requirements") String requirements,
+                @Param("dt")Date dt);
 
     @Modifying
     @Query("update TJob set status=:status where id=:id")

@@ -67,11 +67,30 @@ public class JobController {
     @ApiOperation(value="添加", notes="添加职位", httpMethod = "POST")
     @ApiImplicitParams(value = {
         @ApiImplicitParam(name = "title", value = "职位名称", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "salary", value = "月薪", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "addr", value = "地点", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "experience", value = "经验", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "welfare", value = "福利", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "description", value = "职责", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "requirements", value = "要求", required = true, paramType="query", dataType = "String"),
     })
     @RequestMapping(value="/admin/add", method= RequestMethod.POST)
-    public JsonResult add(@RequestParam("title") String title){
+    public JsonResult add(@RequestParam("title") String title,
+                          @RequestParam("salary") String salary,
+                          @RequestParam("addr") String addr,
+                          @RequestParam("experience") String experience,
+                          @RequestParam("welfare") String welfare,
+                          @RequestParam("description") String description,
+                          @RequestParam("requirements") String requirements
+                          ){
         TJob job = new TJob();
         job.setTitle(title);
+        job.setSalary(salary);
+        job.setAddr(addr);
+        job.setExperience(experience);
+        job.setWelfare(welfare);
+        job.setDescription(description);
+        job.setRequirements(requirements);
         job.setStatus(TJob.STATUS_ONLINE);
         jobService.add(job);
         return new JsonResult(ResultCode.SUCCESS, job.getId());
@@ -92,13 +111,31 @@ public class JobController {
     @ApiImplicitParams(value = {
         @ApiImplicitParam(name = "id", value = "职位id", required = true, paramType="query", dataType = "int"),
         @ApiImplicitParam(name = "title", value = "职位名称", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "salary", value = "月薪", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "addr", value = "地点", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "experience", value = "经验", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "welfare", value = "福利", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "description", value = "职责", required = true, paramType="query", dataType = "String"),
+        @ApiImplicitParam(name = "requirements", value = "要求", required = true, paramType="query", dataType = "String"),
     })
     @RequestMapping(value="/admin/modify", method= RequestMethod.POST)
     public JsonResult modify(@RequestParam("id") Long id,
-            @RequestParam("title") String title){
+            @RequestParam("title") String title,
+             @RequestParam("salary") String salary,
+             @RequestParam("addr") String addr,
+             @RequestParam("experience") String experience,
+             @RequestParam("welfare") String welfare,
+             @RequestParam("description") String description,
+             @RequestParam("requirements") String requirements){
         TJob job = new TJob();
         job.setId(id);
         job.setTitle(title);
+        job.setSalary(salary);
+        job.setAddr(addr);
+        job.setExperience(experience);
+        job.setWelfare(welfare);
+        job.setDescription(description);
+        job.setRequirements(requirements);
         jobService.modify(job);
         return new JsonResult(ResultCode.SUCCESS, true);
     }
