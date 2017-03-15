@@ -147,7 +147,9 @@ public class JobController {
     })
     @RequestMapping(value="/admin/delete", method= RequestMethod.GET)
     public JsonResult delete(@RequestParam("id") Long id){
-        jobService.delete(id);
+        try{
+            jobService.delete(id);
+        }catch (Exception e){}
         return new JsonResult(ResultCode.SUCCESS, true);
     }
 
