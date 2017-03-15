@@ -10,9 +10,11 @@ import com.cew.common.config.HttpSessionConfig;
 import com.cew.dao.TUserDao;
 import com.cew.entity.TUser;
 import com.cew.service.UserService;
+import com.cew.util.SpringContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -60,8 +62,12 @@ public class UserServiceImpl implements UserService {
         adminUser = this.findByName("admin");
         if(adminUser == null) {
             adminUser = new TUser();
-            adminUser.setUserName("admin");
-            adminUser.setPassWord("cew@123");
+            Environment env = SpringContext.getBean(Environment.class);
+            adminUser.setUserName(env.getProperty("cew.user.admin.username"));
+            adminUser.setPassWord(env.getProperty("cew.user.admin.password"));
+            adminUser.setEmail(env.getProperty("cew.user.admin.email"));
+            adminUser.setNickName(env.getProperty("cew.user.admin.nickname"));
+            adminUser.setMobile(env.getProperty("cew.user.admin.mobile"));
             this.addUser(adminUser);
             logger.info("init admin user");
         }
