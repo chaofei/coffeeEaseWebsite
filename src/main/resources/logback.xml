@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.springframework.web" level="ERROR"/>
-    <logger name="org.springframework.boot" level="ERROR"/>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.springframework.boot" level="DEBUG"/>
     <logger name="com.cew" level="ALL"/>
-    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>/tmp/app.log</File>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover -->
-            <FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
-            <!-- keep 30 days' worth of history -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
-        </encoder>
-    </appender>
-    <root level="ERROR"><!-- 大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF -->
-        <appender-ref ref="dailyRollingFileAppender" />
-    </root>
+    <!--<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<File>/tmp/cew/app.log</File>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--&lt;!&ndash; daily rollover &ndash;&gt;-->
+            <!--<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>-->
+            <!--&lt;!&ndash; keep 30 days' worth of history &ndash;&gt;-->
+            <!--<maxHistory>30</maxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder>-->
+            <!--<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+    <!--<root level="ERROR">&lt;!&ndash; 大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF &ndash;&gt;-->
+        <!--<appender-ref ref="dailyRollingFileAppender" />-->
+    <!--</root>-->
 </configuration>
