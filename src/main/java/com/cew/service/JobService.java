@@ -12,9 +12,9 @@ public interface JobService {
 
     boolean existsById(Long id);
 
-    TJob add(TJob job);
+    Long add(TJob job);
 
-    void modify(TJob job);
+    boolean modify(TJob job);
 
     void delete(Long id);
 

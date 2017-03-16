@@ -91,9 +91,11 @@ public class JobController {
         job.setWelfare(welfare);
         job.setDescription(description);
         job.setRequirements(requirements);
-        job.setStatus(TJob.STATUS_ONLINE);
-        jobService.add(job);
-        return new JsonResult(ResultCode.SUCCESS, job.getId());
+        Long newId = jobService.add(job);
+        if (newId>0) {
+            return new JsonResult(ResultCode.SUCCESS, newId);
+        }
+        return new JsonResult(ResultCode.PARAMS_ILLEGAL, 0);
     }
 
 
@@ -136,8 +138,10 @@ public class JobController {
         job.setWelfare(welfare);
         job.setDescription(description);
         job.setRequirements(requirements);
-        jobService.modify(job);
-        return new JsonResult(ResultCode.SUCCESS, true);
+        if(jobService.modify(job)) {
+            return new JsonResult(ResultCode.SUCCESS, true);
+        }
+        return new JsonResult(ResultCode.PARAMS_ILLEGAL, false);
     }
 
 

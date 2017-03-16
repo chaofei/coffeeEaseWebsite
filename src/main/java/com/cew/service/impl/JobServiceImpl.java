@@ -39,12 +39,20 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public TJob add(TJob job) {
-        return jobDao.save(job);
+    public Long add(TJob job) {
+        if(hasEmptyField(job)) {
+            return Long.valueOf(0);
+        }
+        job.setStatus(TJob.STATUS_ONLINE);
+        jobDao.save(job);
+        return job.getId();
     }
 
     @Override
-    public void modify(TJob job) {
+    public boolean modify(TJob job) {
+        if(hasEmptyField(job)) {
+            return false;
+        }
         jobDao.modify(job.getId(),
                 job.getTitle(),
                 job.getSalary(),
@@ -54,6 +62,7 @@ public class JobServiceImpl implements JobService {
                 job.getDescription(),
                 job.getRequirements(),
                 new Date());
+        return true;
     }
 
     @Override
@@ -111,5 +120,15 @@ public class JobServiceImpl implements JobService {
     @Override
     public Integer getOfflineCount() {
         return jobDao.queryCountByStatus(TJob.STATUS_OFFLINE);
+    }
+
+    private boolean hasEmptyField(TJob job) {
+        return job.getTitle().trim().isEmpty() ||
+                job.getSalary().trim().isEmpty() ||
+                job.getAddr().trim().isEmpty() ||
+                job.getExperience().trim().isEmpty() ||
+                job.getWelfare().trim().isEmpty() ||
+                job.getDescription().trim().isEmpty() ||
+                job.getRequirements().trim().isEmpty();
     }
 }
