@@ -36,7 +36,7 @@ public class JobController {
     @RequestMapping(value="/list", method= RequestMethod.GET)
     public JsonResult list(@RequestParam(value = "p", defaultValue = "0", required = false) int pageNum) {
         return new JsonResult(ResultCode.SUCCESS, GeneratePageable.getPageInfo(
-                jobService.getOnlineList(pageNum),
+                jobService.getOnlineListByFullField(pageNum),
                 jobService.getOnlineCount()
         ));
     }

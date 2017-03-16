@@ -78,6 +78,13 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List getOnlineListByFullField(int pageNum) {
+        Sort sort = new Sort(Sort.Direction.DESC, "updateAt");
+        Pageable pageable = new PageRequest(pageNum, 10, sort);
+        return jobDao.queryListByStatus(TJob.STATUS_ONLINE, pageable);
+    }
+
+    @Override
     public List getOnlineList(int pageNum) {
         return this.getList(TJob.STATUS_ONLINE, pageNum);
     }
@@ -88,7 +95,7 @@ public class JobServiceImpl implements JobService {
     }
 
     private List getList(byte status, int pageNum) {
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = new Sort(Sort.Direction.DESC, "updateAt");
         Pageable pageable = new PageRequest(pageNum, 10, sort);
         logger.debug("status:{} pagenum:{} pageoffset:{} pagesize:{}",
                 status,

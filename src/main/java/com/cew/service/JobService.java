@@ -20,6 +20,8 @@ public interface JobService {
 
     void changeStatus(Long id, byte status);
 
+    List getOnlineListByFullField(int pageNum);
+
     List getOnlineList(int pageNum);
 
     Integer getOnlineCount();
